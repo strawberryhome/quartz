@@ -17,7 +17,10 @@
     "check": "tsc --noEmit && npx prettier . --check",
     "format": "npx prettier . --write",
     "test": "tsx ./quartz/util/path.test.ts && tsx ./quartz/depgraph.test.ts",
-    "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1"
+    "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
+    "clear": "rimraf content",
+    "content": "npm run clear && git clone https://github.com/strawberryhome/forest.git content",
+    "preview": "npm run content && npx quartz build --serve"
   },
   "engines": {
     "npm": ">=9.3.1",
