@@ -20,7 +20,7 @@
     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
     "clear": "rimraf content",
     "content": "npm run clear && git clone https://github.com/strawberryhome/forest.git content",
-    "preview": "npm run content && npx quartz build --serve"
+    "preview": "npm i && npm run content && npx quartz build --serve"
   },
   "engines": {
     "npm": ">=9.3.1",
