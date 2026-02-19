@@ -9,5 +9,5 @@ tsconfig.tsbuildinfo
 private/
 .replit
 replit.nix
-content/*
+content/**
 !content/.gitkeep
