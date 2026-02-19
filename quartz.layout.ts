@@ -1,15 +1,36 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
+import { SimpleSlug } from "./quartz/util/path";
+
+const recentPosts = Component.RecentNotes({
+    title: "Recent Posts",
+    limit: 4,
+    linkToMore: "posts/" as SimpleSlug,
+});
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [],
+  afterBody: [
+    Component.Comments({
+      provider: "giscus",
+      options: {
+        repo: "strawberryhome/blog",
+        repoId: "R_kgDORTRXAg",
+        category: "Posts",
+        categoryId: "DIC_kwDORTRXAs4C2ubI",
+        mapping: "og:title",
+      },
+    }),
+    Component.HorizontalRule(),
+    Component.MobileOnly(recentPosts)
+  ],
   footer: Component.Footer({
     links: {
-      GitHub: "https://github.com/jackyzha0/quartz",
-      "Discord Community": "https://discord.gg/cRFFHYye7t",
+      "Home": "https://auth.strawberryhome.org",  
+      "GitHub": "https://github.com/strawberryhome",
+      "RSS": "https://blog.strawberryhome.org/feed.xml",
     },
   }),
 }
@@ -35,13 +56,14 @@ export const defaultContentPageLayout: PageLayout = {
           grow: true,
         },
         { Component: Component.Darkmode() },
-        { Component: Component.ReaderMode() },
+        // { Component: Component.ReaderMode() },
       ],
     }),
-    Component.Explorer(),
+    // Component.Explorer(),
+    Component.DesktopOnly(recentPosts)
   ],
   right: [
-    Component.Graph(),
+    // Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
     Component.Backlinks(),
   ],
@@ -49,7 +71,11 @@ export const defaultContentPageLayout: PageLayout = {
 
 // components for pages that display lists of pages  (e.g. tags or folders)
 export const defaultListPageLayout: PageLayout = {
-  beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
+  beforeBody: [
+    Component.Breadcrumbs(),
+    Component.ArticleTitle(),
+    Component.ContentMeta()
+  ],
   left: [
     Component.PageTitle(),
     Component.MobileOnly(Component.Spacer()),
@@ -62,7 +88,8 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer(),
+    // Component.Explorer(),
+    Component.DesktopOnly(recentPosts)
   ],
   right: [],
 }
