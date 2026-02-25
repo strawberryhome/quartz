@@ -11,7 +11,7 @@ const config: QuartzConfig = {
     pageTitle: "Strawberry Blog",
     pageTitleSuffix: "",
     enableSPA: true,
-    enablePopovers: true,
+    enablePopovers: false,
     analytics: null,
     locale: "en-US",
     baseUrl: "blog.strawberryhome.org",
