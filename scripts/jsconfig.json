@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "nodenext",
+        "module": "NodeNext",
+        "lib": ["ESNext"],
+        "strictNullChecks": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["previews.js"],
+}
