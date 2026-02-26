@@ -1,11 +1,12 @@
 import { globby, convertPathToPattern } from "globby";
 import { dirname, join } from "node:path";
+import { join as posixJoin } from "node:path/posix";
 import { fileURLToPath } from "node:url";
 import { JSDOM } from "jsdom";
 import { readFile, writeFile } from "node:fs/promises";
 
 const previewsDirectory = join(dirname(fileURLToPath(import.meta.url)), "..", "previews");
-const search = convertPathToPattern(join(previewsDirectory, "**/*.html"))
+const search = posixJoin(convertPathToPattern(previewsDirectory), "**/*.html")
 console.log("Searching", search)
 const files = await globby(search);
 console.log(`Rewriting ${files.length} files`)
