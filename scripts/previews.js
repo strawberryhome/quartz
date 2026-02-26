@@ -6,6 +6,7 @@ import { readFile, writeFile } from "node:fs/promises";
 
 const previewsDirectory = join(dirname(fileURLToPath(import.meta.url)), "..", "previews");
 const search = convertPathToPattern(join(previewsDirectory, "**/*.html"))
+console.log("Searching", search)
 const files = await globby(search);
 console.log(`Rewriting ${files.length} files`)
 
