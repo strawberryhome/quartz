@@ -24,6 +24,8 @@ try {
             `link[rel="stylesheet"]`,
             `link[rel="preconnect"]`,
             `link[title="RSS Feed"]`,
+            `meta[property="og:image:url"]`,
+            `meta[name="twitter:image"]`,
         ]
         for (const query of queries) {
             const elements = dom.window.document.querySelectorAll(query);
