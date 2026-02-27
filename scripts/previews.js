@@ -35,7 +35,9 @@ try {
             }
         }
         const ogImage = dom.window.document.querySelector(`meta[property="og:image"]`);
-        if (ogImage) ogImage.setAttribute("content", "https://blog.strawberryhome.org/static/icon.png")
+        if (ogImage && ogImage.getAttribute("content") === "https://blog.strawberryhome.org/static/og-image.png") {
+            ogImage.setAttribute("content", "https://blog.strawberryhome.org/static/icon.png")
+        }
         const content = dom.serialize();
         await writeFile(filePath, content, { encoding: "utf8" });
     };
