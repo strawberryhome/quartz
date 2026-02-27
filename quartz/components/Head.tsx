@@ -1,10 +1,18 @@
 import { i18n } from "../i18n"
-import { FullSlug, getFileExtension, joinSegments, pathToRoot } from "../util/path"
+// import { FullSlug, getFileExtension, joinSegments, pathToRoot } from "../util/path"
+import { getFileExtension, isAbsoluteURL, joinSegments } from "../util/path"
 import { CSSResourceToStyleElement, JSResourceToScriptElement } from "../util/resources"
 import { googleFontHref, googleFontSubsetHref } from "../util/theme"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { unescapeHTML } from "../util/escape"
 import { CustomOgImagesEmitterName } from "../plugins/emitters/ogImage"
+
+function resolveSocialImage(baseUrl: string, input: string | null): string | null  {
+  if (!input) return null;
+  if (isAbsoluteURL(input)) input;
+  return new URL(input, baseUrl).toString();
+}
+
 export default (() => {
   const Head: QuartzComponent = ({
     cfg,
@@ -20,12 +28,19 @@ export default (() => {
       fileData.frontmatter?.description ??
       unescapeHTML(fileData.description?.trim() ?? i18n(cfg.locale).propertyDefaults.description)
 
+    // Support color frontmatter
+    const color = fileData.frontmatter?.color || "#f8312f";
+    
     const { css, js, additionalHead } = externalResources
 
-    const url = new URL(`https://${cfg.baseUrl ?? "example.com"}`)
-    const path = url.pathname as FullSlug
-    const baseDir = fileData.slug === "404" ? path : pathToRoot(fileData.slug!)
-    const iconPath = joinSegments(baseDir, "static/icon.png")
+    const baseUri = `https://${cfg.baseUrl ?? "example.com"}`;
+    const url = new URL(baseUri)
+
+    // Use absolute path for iconPath
+    const iconPath = "/static/icon.png"
+    // const path = url.pathname as FullSlug
+    // const baseDir = fileData.slug === "404" ? path : pathToRoot(fileData.slug!)
+    // const iconPath = joinSegments(baseDir, "static/icon.png")
 
     // Url of current page
     const socialUrl =
@@ -34,7 +49,14 @@ export default (() => {
     const usesCustomOgImage = ctx.cfg.plugins.emitters.some(
       (e) => e.name === CustomOgImagesEmitterName,
     )
-    const ogImageDefaultPath = `https://${cfg.baseUrl}/static/og-image.png`
+
+    // Support socialImage, image, etc. without custom OgImage emitter plugim
+    const socialImage = fileData.frontmatter?.socialImage || null;
+    const ogImageDefaultPath = `https://${cfg.baseUrl}/static/icon.png`;
+    const ogImageCustomPath = resolveSocialImage(baseUri, socialImage);
+    const ogImagePath = ogImageCustomPath ?? ogImageDefaultPath;
+
+    // joinSegments(url.toString()
 
     return (
       <head>
@@ -53,10 +75,11 @@ export default (() => {
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+        <meta name="theme-color" content={color} />
         <meta name="og:site_name" content={cfg.pageTitle}></meta>
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
+        {/* <meta name="twitter:card" content="summary_large_image" /> */}
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta property="og:description" content={description} />
@@ -64,12 +87,12 @@ export default (() => {
 
         {!usesCustomOgImage && (
           <>
-            <meta property="og:image" content={ogImageDefaultPath} />
-            <meta property="og:image:url" content={ogImageDefaultPath} />
-            <meta name="twitter:image" content={ogImageDefaultPath} />
+            <meta property="og:image" content={ogImagePath} />
+            {/* <meta property="og:image:url" content={ogImagePath} /> */}
+            {/* <meta name="twitter:image" content={ogImagePath} /> */}
             <meta
               property="og:image:type"
-              content={`image/${getFileExtension(ogImageDefaultPath)?.replace(".", "") ?? "png"}`}
+              content={`image/${getFileExtension(ogImagePath)?.replace(".", "") ?? "png"}`}
             />
           </>
         )}

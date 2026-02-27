@@ -24,19 +24,15 @@ try {
             `link[rel="stylesheet"]`,
             `link[rel="preconnect"]`,
             `link[title="RSS Feed"]`,
-            `meta[property="og:image:url"]`,
-            `meta[name="twitter:image"]`,
-            `meta[name="twitter:card"]`,
+            // `meta[property="og:image:url"]`,
+            // `meta[name="twitter:image"]`,
+            // `meta[name="twitter:card"]`,
         ]
         for (const query of queries) {
             const elements = dom.window.document.querySelectorAll(query);
             for (const element of elements) {
                 element.remove();
             }
-        }
-        const ogImage = dom.window.document.querySelector(`meta[property="og:image"]`);
-        if (ogImage && ogImage.getAttribute("content") === "https://blog.strawberryhome.org/static/og-image.png") {
-            ogImage.setAttribute("content", "https://blog.strawberryhome.org/static/icon.png")
         }
         const content = dom.serialize();
         await writeFile(filePath, content, { encoding: "utf8" });
