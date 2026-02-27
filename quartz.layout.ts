@@ -3,9 +3,10 @@ import * as Component from "./quartz/components"
 import { SimpleSlug } from "./quartz/util/path";
 
 const recentPosts = Component.RecentNotes({
-    title: "Recent Posts",
-    limit: 4,
-    linkToMore: "posts/" as SimpleSlug,
+  title: "Recent Posts",
+  limit: 4,
+  linkToMore: "posts/" as SimpleSlug,
+  filter: (note) => note.slug!.startsWith("posts/") && note.slug! !== "posts/index" && !note.frontmatter?.noindex,
 });
 
 // components shared across all pages
