@@ -29,7 +29,9 @@ export const sharedPageComponents: SharedLayout = {
   ],
   footer: Component.Footer({
     links: {
-      "Home": "https://auth.strawberryhome.org",  
+      "Home": "https://blog.strawberryhome.org",
+      "Account": "https://auth.strawberryhome.org",
+      "Apps": "https://auth.strawberryhome.org/settings/apps",
       "GitHub": "https://github.com/strawberryhome",
       "RSS": "https://blog.strawberryhome.org/feed.xml",
     },
